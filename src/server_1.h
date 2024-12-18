@@ -2,7 +2,7 @@
 #define SERVER_1_H
 
 #define PORT 1111
-#define MAX_BUFFER_SIZE 4096
+#define MAX_BUFFER_SIZE 256
 
 #include <stdio.h>
 #include <stdlib.h>

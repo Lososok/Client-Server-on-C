@@ -43,7 +43,9 @@ int main() {
     fgets(buffer, BUFFER_SIZE, stdin);
 
     if (strcmp(buffer, "exit\n") != 0) {
-        send(sock, buffer, strlen(buffer), 0);
+        int s = send(sock, buffer, strlen(buffer), 0);
+        printf("Send: %d\n", s);
+        // recv(sock, buffer, BUFFER_SIZE, MSG_DONTWAIT);
         recv(sock, buffer, BUFFER_SIZE, 0);
         printf("Server response: %s\n", buffer);
     }
