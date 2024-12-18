@@ -1,11 +1,13 @@
 #include "server.h"
 
-#define PORT 8080
+#define PORT 8081
 
 int init_port(int *server_fd, int *opt, struct sockaddr_in *address);
 void *session(void *arg);
 void command_handler(char *command, int sock);
 void *out(void *arg);
+int physical_memory_used();
+int virtual_memory_used();
 
 int main() {
     int server_fd, new_socket;
@@ -16,7 +18,7 @@ int main() {
     if (!init_port(&server_fd, &new_socket, &address)) { return 1; }
 
     initscr();
-    printw("Run server 1\n");
+    printw("Run server 2\n");
     refresh();
 
     pthread_t check_cli;
@@ -32,7 +34,7 @@ int main() {
             exit(EXIT_FAILURE);
         }
 
-        printw("Connect client %d on server 1\n", new_socket);
+        printw("Connect client %d on server 2\n", new_socket);
         refresh();
 
         pthread_t thread_id;
@@ -82,7 +84,7 @@ void *session(void *arg) {
     int sock = *(int *)arg;
     int read_size = 1;
 
-    send(sock, "connect server 1\n", strlen("connect server 1\n") + 1, 0);
+    send(sock, "connect server 2\n", strlen("connect server 2\n") + 1, 0);
 
     while (read_size > 0) {
         char command_buffer[BUFFER_SIZE] = {0};
