@@ -6,6 +6,7 @@ int init_port(int *server_fd, int *opt, struct sockaddr_in *address);
 void *session(void *arg);
 void command_handler(char *command, int sock);
 void *out(void *arg);
+char *show_time(char *src);
 
 int main() {
     int server_fd, new_socket;
@@ -105,20 +106,27 @@ void *session(void *arg) {
 void command_handler(char *command, int sock) {
     if (strcmp(command, "error") == 0) {
         char message[BUFFER_SIZE] = {0};
+        char current_time[128] = {0};
         int error_code = errno;
-        sprintf(message, "last error code: %d\n", error_code);
+        show_time(current_time);
+        sprintf(message, "%s: last error code: %d\n", current_time, error_code);
         send(sock, message, strlen(message) + 1, 0);
     }
     else if (strcmp(command, "cursor") == 0) {
         char message[BUFFER_SIZE] = {0};
+        char current_time[128] = {0};
         int x = -1, y = -1;
         getyx(stdscr, y, x);
-        sprintf(message, "cursor position: y = %d, x = %d\n", y, x);
+        show_time(current_time);
+        sprintf(message, "%s: cursor position: y = %d, x = %d\n", current_time, y, x);
         send(sock, message, strlen(message) + 1, 0);
     }
     else {
-        const char *error_message = "invalid command\n";
-        send(sock, error_message, strlen(error_message) + 1, 0);
+        char message[BUFFER_SIZE] = {0};
+        char current_time[128] = {0};
+        show_time(current_time);
+        sprintf(message, "%s: invalid command\n", current_time);
+        send(sock, message, strlen(message) + 1, 0);
     }
 }
 
@@ -128,4 +136,10 @@ void *out(void *arg) {
     refresh();
     endwin();
     exit(0);
+}
+
+char *show_time(char *src) {
+    time_t current_time = time(NULL);
+    struct tm *now = localtime(&current_time);
+    sprintf(src, "TIME:\t%.2d:%.2d:%.2d", now->tm_hour, now->tm_min, now->tm_sec);
 }
