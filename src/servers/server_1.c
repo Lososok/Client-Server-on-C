@@ -1,7 +1,6 @@
 #include "server.h"
 
 #define PORT 8080
-// #define RUN_LOGGER "'logger.exe 1'"
 
 int init_port(int *server_fd, int *opt, struct sockaddr_in *address);
 void *session(void *arg);
@@ -10,21 +9,22 @@ void *out(void *arg);
 char *show_time(char *src);
 void create_log_note(char *buf);
 
-const char *pipe_name = "temp/server_1";
+const char *pipe_name = "/tmp/server_1";
 int fd;
 
 int main() {
-    initscr();
     fd = open(pipe_name, O_WRONLY, 066);
-    if (fd == -1) { perror("open pipe error"); }
+    if (fd == -1) { perror("open pipe error"); return 1; }
 
     int server_fd, new_socket;
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
 
+    initscr();
     if (!init_port(&server_fd, &new_socket, &address)) { 
         close(fd);
+        endwin();
         return 1; 
     }
 
@@ -40,6 +40,7 @@ int main() {
         close(fd);
         return 1;
     }
+    pthread_detach(check_cli);
 
     while (1) {
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
@@ -51,7 +52,9 @@ int main() {
         }
 
         printw("Connect client %d on server 1\n", new_socket);
-        create_log_note("Connect client");
+        char create_log_note_message[128] = {0};
+        sprintf(create_log_note_message, "Connect client %d on server 1", new_socket);
+        create_log_note(create_log_note_message);
         refresh();
 
         pthread_t thread_id;
@@ -64,10 +67,8 @@ int main() {
             free(new_sock);
             continue;
         }
-
         pthread_detach(thread_id);
     }
-
     return 0;
 }
 
@@ -203,6 +204,6 @@ void create_log_note(char *buf) {
     struct tm *now = localtime(&current_datetime);
     sprintf(data, "DATETIME:\t%.2d:%.2d:%.2d %.2d:%.2d:%.4d:\t%s\n", now->tm_hour, now->tm_min, now->tm_sec, now->tm_mday, now->tm_mon+1, now->tm_year+1900, buf);
     ssize_t bytes = write(fd, data, strlen(data) + 1);
-    printw("log size send: %lu\n", bytes);
-    refresh();
+    // printw("log size send: %lu\n", bytes);
+    // refresh();
 }
