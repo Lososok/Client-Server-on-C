@@ -36,7 +36,7 @@ int main(int argc, const char **argv) {
             // char *log_message = malloc((strlen(buffer) + 1) * sizeof(char));
             // strcpy(log_message, buffer);
             // pthread_t log_pthread;
-            // if (strcmp(buffer, "-1") == 0) { break; }
+            if (strcmp(buffer, "-1") == 0) { break; }
             if (bytes > 0) {
                     printf("Read %lu bytes\n", bytes);
                     printf("%s\n", buffer);
