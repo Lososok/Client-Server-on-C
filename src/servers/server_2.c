@@ -132,7 +132,7 @@ void command_handler(char *command, int sock) {
 
 void *out(void *arg) {
     while (getchar() != 'q') { sleep(1); }
-    printw("Shutdown server\n");
+    printw("Shutdown server 1\n");
     refresh();
     endwin();
     exit(0);
