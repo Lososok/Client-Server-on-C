@@ -11,5 +11,8 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <errno.h>
+#include <sys/sysinfo.h>
+#include <sys/utsname.h>
+#include <sys/sysinfo.h>
 
 #endif

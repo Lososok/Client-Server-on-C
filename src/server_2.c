@@ -6,8 +6,7 @@ int init_port(int *server_fd, int *opt, struct sockaddr_in *address);
 void *session(void *arg);
 void command_handler(char *command, int sock);
 void *out(void *arg);
-int physical_memory_used();
-int virtual_memory_used();
+float virtual_and_pthysical_memory_used();
 
 int main() {
     int server_fd, new_socket;
@@ -105,17 +104,16 @@ void *session(void *arg) {
 }
 
 void command_handler(char *command, int sock) {
-    if (strcmp(command, "error") == 0) {
+    if (strcmp(command, "physical") == 0) {
         char message[BUFFER_SIZE] = {0};
-        int error_code = errno;
-        sprintf(message, "last error code: %d\n", error_code);
+        float rez = virtual_and_pthysical_memory_used();
+        sprintf(message, "percentage of pthysical memory used: %.2f%%\n", rez);
         send(sock, message, strlen(message) + 1, 0);
     }
-    else if (strcmp(command, "cursor") == 0) {
+    else if (strcmp(command, "virtual") == 0) {
         char message[BUFFER_SIZE] = {0};
-        int x = -1, y = -1;
-        getyx(stdscr, y, x);
-        sprintf(message, "cursor position: y = %d, x = %d\n", y, x);
+        float rez = virtual_and_pthysical_memory_used();
+        sprintf(message, "percentage of virtual memory used: %.2f%%\n", rez);
         send(sock, message, strlen(message) + 1, 0);
     }
     else {
@@ -130,4 +128,19 @@ void *out(void *arg) {
     refresh();
     endwin();
     exit(0);
+}
+
+float virtual_and_pthysical_memory_used() {
+    struct sysinfo info;
+
+    if (sysinfo(&info) != 0) {
+        perror("sysinfo");
+        exit(1);
+    }
+
+    long totalMemory = info.totalram;
+    long freeMemory = info.freeram;
+    long usedMemory = totalMemory - freeMemory;
+
+    return ((float)usedMemory / totalMemory) * 100;
 }

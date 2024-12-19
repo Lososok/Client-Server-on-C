@@ -3,7 +3,7 @@
 CC=gcc
 LIBS=-lncurses
 
-all: server1 client
+all: server1 server2 client
 
 server1:
 	$(CC) server_1.c $(LIBS) -o server1
