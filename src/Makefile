@@ -1,7 +1,7 @@
 .PHONY: all client server1 server2 logger
 
 CC=gcc
-LIBS=-lncurses
+LIBS=-lncurses -lc
 
 all: server1 server2 client logger
 

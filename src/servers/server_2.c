@@ -14,7 +14,21 @@ const char *pipe_name = "/tmp/server_2";
 int fd;
 
 int main() {
-    fd = open(pipe_name, O_WRONLY, 066);
+    FILE *pipe = popen("ps -a | grep logger.exe", "r");
+    if (pipe != NULL) {
+        char buffer[BUFFER_SIZE] = {0};
+        fgets(buffer, BUFFER_SIZE, pipe);
+        if (strlen(buffer) == 0) {
+            printf("Logger dosent exit\n");
+            return 1;
+        }
+        pclose(pipe);
+    } else {
+        perror("fopen");
+        return 1;
+    }
+
+    fd = open(pipe_name, O_WRONLY, 066);    // TODO: run logger if dosent run
     if (fd == -1) { perror("open pipe error"); return 1; }
 
     int server_fd, new_socket;
@@ -180,7 +194,6 @@ void *out(void *arg) {
     printw("Shutdown server 1\n");
     refresh();
     create_log_note("Shutdown server 2");
-    write(fd, "-1", strlen("-1") + 1);
     endwin();
     close(fd);
     exit(0);

@@ -13,6 +13,20 @@ const char *pipe_name = "/tmp/server_1";
 int fd;
 
 int main() {
+    FILE *pipe = popen("ps -a | grep logger.exe", "r");
+    if (pipe != NULL) {
+        char buffer[BUFFER_SIZE] = {0};
+        fgets(buffer, BUFFER_SIZE, pipe);
+        if (strlen(buffer) == 0) {
+            printf("Logger dosent exit\n");
+            return 1;
+        }
+        pclose(pipe);
+    } else {
+        perror("fopen");
+        return 1;
+    }
+    initscr();
     fd = open(pipe_name, O_WRONLY, 066);
     if (fd == -1) { perror("open pipe error"); return 1; }
 
@@ -21,7 +35,6 @@ int main() {
     int opt = 1;
     int addrlen = sizeof(address);
 
-    initscr();
     if (!init_port(&server_fd, &new_socket, &address)) { 
         close(fd);
         endwin();
@@ -186,7 +199,6 @@ void *out(void *arg) {
     printw("Shutdown server 1\n");
     refresh();
     create_log_note("Shutdown server 1");
-    write(fd, "-1", strlen("-1") + 1);
     endwin();
     close(fd);
     exit(0);
@@ -204,6 +216,4 @@ void create_log_note(char *buf) {
     struct tm *now = localtime(&current_datetime);
     sprintf(data, "DATETIME:\t%.2d:%.2d:%.2d %.2d:%.2d:%.4d:\t%s\n", now->tm_hour, now->tm_min, now->tm_sec, now->tm_mday, now->tm_mon+1, now->tm_year+1900, buf);
     ssize_t bytes = write(fd, data, strlen(data) + 1);
-    // printw("log size send: %lu\n", bytes);
-    // refresh();
 }
