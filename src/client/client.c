@@ -115,7 +115,7 @@ void disconnect_from_server(int *sock) {
     }
 }
 
-void send_command(int sock, char command[BUFFER_SIZE]) {
+void send_command(int sock, char *command) {
     if (sock != -1) {
         send(sock, command, strlen(command) + 1, 0);
         char buffer[BUFFER_SIZE];

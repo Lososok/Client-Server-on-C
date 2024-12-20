@@ -9,47 +9,6 @@ void *write_log(void *arg);
 void *out(void *arg);
 
 int main() {    
-    // strcpy(file1, "/tmp/server_1");
-    // int fd1 = mkfifo(PIPE_NAME, 0666);
-
-    // fd1 = mkfifo(file1, 0666);
-    // // fd1 = open(file1, O_RDONLY | O_TRUNC | O_CREAT, 777);
-    // // perror("fd1 open 1");
-    // // printf("here11\n");
-    // if (fd1 == -1) {
-    //     perror("mkfifo");
-    //     fd1 = open(file1, O_RDONLY | O_TRUNC, 777);
-    //     perror("fd1 open 1");
-    //     if (fd1 == -1) {
-    //         return 1;
-    //     }
-    //     // return 1;
-    // }
-    // strcpy(file2, "/tmp/server_2");
-    // // fd1 = open(file1, O_RDONLY | O_TRUNC | O_CREAT, 777);
-    // // perror("fd1 open 1");
-    // // printf("here12\n");
-    // fd2 = mkfifo(file2, 0666);
-    // if (fd2 == -1) { 
-    //     perror("mkfifo");
-    //     fd2 = open(file2, O_RDONLY | O_TRUNC, 777);
-    //     perror("fd1 open 2");
-    //     if (fd2 == -1) {
-    //         close(fd1);
-    //         return 1;
-    //     }
-    //     // return 1; 
-    // }
-    
-
-    // pthread_t check_cli;
-    // if (pthread_create(&check_cli, NULL, out, NULL)) {
-    //     close(fd1);
-    //     return 1;
-    // }
-    // pthread_detach(check_cli);
-    // printf("Start log server %s\n", argv[1]);
-    // pthread_mutex_init(&mutex, NULL);
     pthread_t serv1;
     pthread_t serv2;
     char *name1 = NAME1;
