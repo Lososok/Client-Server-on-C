@@ -178,20 +178,6 @@ void command_handler(char *command, int sock) {
         printw("Send client %d cursor position\n", sock);
         refresh();
     }
-    else {
-        // char message[BUFFER_SIZE] = {0};
-        // char current_time[128] = {0};
-        // show_time(current_time);
-        // sprintf(message, "%s: invalid command\n", current_time);
-        // send(sock, message, strlen(message) + 1, 0);
-        // // send(sock, message, strlen(message) + 1, 0);
-        // char create_log_note_message[128] = {0};
-        // sprintf(create_log_note_message, "Send client %d bad request", sock);
-        // create_log_note(create_log_note_message);
-
-        // printw("Send client %d bad request\n", sock);
-        // refresh();
-    }
 }
 
 void *out(void *arg) {

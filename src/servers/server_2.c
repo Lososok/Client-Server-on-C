@@ -28,7 +28,7 @@ int main() {
         return 1;
     }
 
-    fd = open(pipe_name, O_WRONLY, 066);    // TODO: run logger if dosent run
+    fd = open(pipe_name, O_WRONLY, 066);
     if (fd == -1) { perror("open pipe error"); return 1; }
 
     int server_fd, new_socket;
@@ -179,13 +179,6 @@ void command_handler(char *command, int sock) {
 
         printw("Send client %d percentage of virtual memory used\n", sock);
         refresh();
-    }
-    else {
-        // char message[BUFFER_SIZE] = {0};
-        // char current_time[128] = {0};
-        // show_time(current_time);
-        // sprintf(message, "%s: invalid command\n", current_time);
-        // send(sock, message, strlen(message) + 1, 0);
     }
 }
 
