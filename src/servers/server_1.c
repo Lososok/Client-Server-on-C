@@ -177,7 +177,7 @@ void command_handler(char *command, int sock) {
 
         printw("Send client %d cursor position\n", sock);
         refresh();
-    }
+    } 
 }
 
 void *out(void *arg) {

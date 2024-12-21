@@ -1,53 +1,21 @@
 #include "logger.h"
 
-#define NAME1 "server_1.log"
-#define NAME2 "server_2.log"
-#define FILE1 "/tmp/server_1"
-#define FILE2 "/tmp/server_2"
-
-void *write_log(void *arg);
-void *out(void *arg);
-
 int main() {    
     pthread_t serv1;
     pthread_t serv2;
     char *name1 = NAME1;
     char *name2 = NAME2;
     if (pthread_create(&serv1, NULL, write_log, (void*)name1)) {
-        // close(fd1);
-        // close(fd2);
         return 1;
     }
     pthread_detach(serv1);
     if (pthread_create(&serv2, NULL, write_log, (void*)name2)) {
-        // close(fd1);
-        // close(fd2);
         return 1;
     }
     pthread_detach(serv2);
     printf("Start log server\n");
-    // FILE *f = NULL;
-    // ssize_t bytes = 0;
-    // if ((f = fopen(name, "a")) != NULL) {
-    //     while (1) {
-    //         char buffer[BUFFER_SIZE] = {0};
-    //         bytes = read(fd1, buffer, BUFFER_SIZE);
-    //         if (strcmp(buffer, "-1") == 0) { break; }
-    //         if (bytes > 0) {
-    //                 // printf("Read %lu bytes\n", bytes);
-    //                 printf("%s\n", buffer);
-    //                 fputs(buffer, f);
-    //         } else if (bytes == -1) {
-    //             printf("Read error\n");
-    //             break;
-    //         } 
-    //     }
-    //     fclose(f);
-    // }
     getchar();
     printf("End log server\n");
-    // close(fd1);
-    // close(fd2);
     return 0;
 }
 
@@ -70,7 +38,6 @@ void *write_log(void *arg) {
             char buffer[BUFFER_SIZE] = {0};
             bytes = read(fd, buffer, BUFFER_SIZE);
             if (bytes > 0) {
-                    // printf("Read %lu bytes\n", bytes);
                     printf("%s\n", buffer);
                     fputs(buffer, f);
             } else if (bytes == -1) {
