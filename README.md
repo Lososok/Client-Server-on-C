@@ -10,7 +10,9 @@
 6. The log server write logs of all events in the main servers
 ## Build all
     make
-## Run docer
+## Build .exe files
+    make exe
+## Run docker
 ### Buid image
     make image
 ### Run container 
