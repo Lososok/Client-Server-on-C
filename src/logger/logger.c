@@ -33,19 +33,19 @@ void *write_log(void *arg) {
     }
     FILE *f = NULL;
     ssize_t bytes = 0;
-    if ((f = fopen(name, "a")) != NULL) {
-        while (1) {
-            char buffer[BUFFER_SIZE] = {0};
-            bytes = read(fd, buffer, BUFFER_SIZE);
-            if (bytes > 0) {
-                    printf("%s\n", buffer);
-                    fputs(buffer, f);
-            } else if (bytes == -1) {
-                printf("Read error\n");
-                break;
-            } 
-        }
-        fclose(f);
+    while (1) {
+        char buffer[BUFFER_SIZE] = {0};
+        bytes = read(fd, buffer, BUFFER_SIZE);
+        if (bytes > 0) {
+            if ((f = fopen(name, "a")) != NULL) {
+                printf("%s\n", buffer);
+                fputs(buffer, f);
+                fclose(f);
+            }
+        } else if (bytes == -1) {
+            printf("Read error\n");
+            break;
+        } 
     }
     close(fd);
 }
